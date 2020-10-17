@@ -93,4 +93,4 @@ async def set(ctx,a: int):
 @bot.command()
 async def a(ctx):
     await ctx.send('對')
-bot.run('my bot token')
+bot.run('*my bot token*')
