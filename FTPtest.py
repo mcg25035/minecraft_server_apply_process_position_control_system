@@ -1,29 +1,35 @@
-from ftplib import FTP
-import os
-import sys
-import configparser
 import socket
+import threading
+import time
+def i():
+    client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    client.connect((host,recv_port))
+    f = open('food.mcfunction','w+')
+    info = 'a'
+    info_all = ''
+    while not info == '':
+        info = client.recv(1024).decode("utf-8",errors='ignore')
+        info_all = info_all+info
+    f.write(info_all)
+    f.close()
+    
 
-def downloadfile(downftp, remotepath,localpath):
-    bufsize=1024
-    fp = open(localpath,'wb')     
-    downftp.set_debuglevel(2)
-    downftp.retrbinary('RETR ' + remotepath, fp.write, bufsize)
-    fp.close()   
-	
-def ftpconnect(host,username,password):
-    ftp = FTP()
-    #ftp.af = socket.AF_INET6
-    ftp.set_pasv(False)
-    ftp.connect(host=host,port=10022)
-    ftp.login(username, password)
-    return ftp
+    
+client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+host = "qaz02546sd.servegame.com"
+port = 10022
+client.connect((host,port))
+client.recv(1024)
+client.send('USER cityofuniverse.116server'.encode("utf-8",errors='strict'))
+client.recv(1024)
+client.send('PASS COU006123'.encode("utf-8",errors='strict'))
+client.recv(1024)
+client.send('PASV'.encode("utf-8",errors='strict'))
+temp_str = client.recv(1024).decode("utf-8")
+recv_port = (int(temp_str.split('(')[1].split(')')[0].split(',')[4])*256)+(int(temp_str.split('(')[1].split(')')[0].split(',')[5]))
+t = threading.Thread(target = i)
+t.start()
+client.send('CWD /world/datapacks/sys/data/pgdc/functions/'.encode("utf-8",errors='strict'))
+client.recv(1024)
+client.send('RETR food.mcfunction'.encode("utf-8",errors='strict'))
 
-def uploadfile(ftp,remotepath, localpath):
-    bufsize=1024
-    fp=open(localpath,'rb')       
-    ftp.set_debuglevel(0)
-    ftp.storbinary('STOR ' + remotepath, fp, bufsize)
-    fp.close()
-conftp = ftpconnect('42.0.75.201','cityofuniverse.116server','COU006123')
-downloadfile(conftp,'/world/datapacks/sys/data/pgdc/functions/food.mcfunction','food.mcfunction')
