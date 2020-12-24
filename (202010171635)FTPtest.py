@@ -20,9 +20,9 @@ host = "qaz02546sd.servegame.com"
 port = 10022
 client.connect((host,port))
 client.recv(1024)
-client.send('USER cityofuniverse.116server'.encode("utf-8",errors='strict'))
+client.send('USER cityo************ver'.encode("utf-8",errors='strict'))
 client.recv(1024)
-client.send('PASS COU006123'.encode("utf-8",errors='strict'))
+client.send('PASS COU******'.encode("utf-8",errors='strict'))
 client.recv(1024)
 client.send('PASV'.encode("utf-8",errors='strict'))
 temp_str = client.recv(1024).decode("utf-8")
